@@ -1,0 +1,52 @@
+###########
+# BUILDER #
+###########
+
+# pull official base image 
+FROM node:15.2.0-alpine as builder 
+
+# set working directory 
+WORKDIR /usr/src/app 
+
+# add /usr/src/app/node_modules/.bin to $PATH 
+ENV PATH /usr/src/app/node_modules/.bin:$PATH 
+
+# install and cache app dependencies 
+COPY package.json . 
+COPY package-lock.json . 
+RUN npm ci 
+#RUN npm install react-scripts@4.0.0 --silent
+
+# set environment variables
+ARG REACT_APP_BE_NETWORK
+ENV REACT_APP_BE_NETWORK http://localhost
+ARG REACT_APP_BE_PORT
+ENV REACT_APP_BE_PORT 5000
+
+# create build 
+COPY . . 
+RUN npm run build 
+
+######### 
+# FINAL # 
+######### 
+
+# base image 
+FROM nginx 
+
+# update nginx conf 
+#RUN rm -rf /etc/nginx/conf.d 
+#COPY conf /etc/nginx 
+
+# copy static files 
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html 
+
+# expose port 
+EXPOSE 80
+
+#RUN npm run build
+#FROM nginx
+#COPY build /usr/share/nginx/html
+#EXPOSE 80
+#ENV REACT_APP_BE_NETWORK http://192.168.99.105
+#ENV REACT_APP_BE_PORT 5004
