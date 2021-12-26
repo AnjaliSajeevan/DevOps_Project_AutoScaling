@@ -1,6 +1,6 @@
 # Final Project 
 
-Deploy a twitter application using docker image on Azure Elastic Kubernetes service (aks) with terraform, perform HPA autoscaling based on cpu and memory, monitoring with Prometheus and GrafanaAlert messages can be send to slack using alert manager. Locust was used for load testing.
+Deploy a twitter application using docker image on Azure Elastic Kubernetes service (aks) with terraform, perform HPA autoscaling based on cpu and memory, monitoring with Prometheus and Grafana. Alert messages can be send to slack using alert manager. Locust was used for load testing.
 
 ## Technologies Used:
 - Azure Elastic Kubernetes service (AKS) with terraform
